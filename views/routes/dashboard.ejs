@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+    </title>
+    <link rel='stylesheet' href='/stylesheets/index.css' />
+
+    <script>
+        window.onload = () => {
+            const token = localStorage.getItem("token");
+            console.log(token)
+            const options = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+            };
+
+            fetch(`http://localhost:3000/user/dashboard/`, options)
+                .then(res => res.json())
+                .then((data) => { })
+        }
+    </script>
+</head>
+
+<body>
+    <h1>
+        WELCOME
+    </h1>
+
+
+
+</body>
+
+</html>

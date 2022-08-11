@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+    </title>
+    <link rel='stylesheet' href='/stylesheets/index.css' />
+</head>
+
+<body>
+    <h1>
+        Please fill in your details
+    </h1>
+    <form id="reg-form">
+        <label for="fname">Fullname:</label><br>
+        <input type="text" id="fname" name="fname"><br><br>
+        <label for="email">Email:</label><br>
+        <input type="text" id="email" name="email"><br><br>
+        <label for="gender">Gender:</label><br>
+        <input type="text" id="gender" name="gender"><br><br>
+        <label for="phone">Phone:</label><br>
+        <input type="text" id="phone" name="phone"><br><br>
+        <label for="address">Address:</label><br>
+        <input type="text" id="address" name="address"><br><br>
+        <label for="password">Password:</label><br>
+        <input type="text" id="password" name="password"><br><br>
+        <label for="cn_frm">Confirm password:</label><br>
+        <input type="text" id="cn_frm" name="cn_frm"><br><br>
+        <input type="submit" id="submit-register" value="Register" />
+    </form>
+
+    <script>
+        const regForm = document.querySelector('#reg-form');
+        regForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const fullname = document.querySelector('#fname').value;
+            const email = document.querySelector('#email').value;
+            const gender = document.querySelector('#gender').value;
+            const phone = document.querySelector('#phone').value;
+            const address = document.querySelector('#address').value;
+            const password = document.querySelector('#password').value;
+            const confirm_password = document.querySelector('#cn_frm').value;
+
+            const registerData = JSON.stringify({
+                "fullname": fullname,
+                "email": email,
+                "gender": gender,
+                "phone": phone,
+                "address": address,
+                "password": password,
+                "confirm_password": confirm_password
+            })
+
+            // const registerData = {
+            //     Fullname,
+            //     email,
+            //     gender,
+            //     phone,
+            //     address,
+            //     password,
+            //     confirm_password
+            // }
+
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: registerData,
+            };
+
+            fetch('http://localhost:3000/api/user/create', options)
+                .then(res => res.json())
+                .then((data) => {
+                    console.log('data:', data)
+                    if (data.record) {
+                        window.location.href = 'http://localhost:3000/user/login';
+                    }
+                })
+
+        })
+    </script>
+</body>
+
+</html>

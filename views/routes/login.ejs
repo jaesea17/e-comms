@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+    </title>
+    <link rel='stylesheet' href='/stylesheets/index.css' />
+</head>
+
+<body>
+    <h1>
+        Please fill in your details
+    </h1>
+    <form id="login-form">
+        <label for="email">Email:</label><br>
+        <input type="text" id="email" name="email"><br><br>
+        <label for="password">Password:</label><br>
+        <input type="text" id="password" name="password"><br><br>
+        <input type="submit" value="Login" />
+    </form>
+    <script>
+        const loginForm = document.querySelector('#login-form');
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.querySelector('#email').value;
+            const password = document.querySelector('#password').value;
+
+            const loginData = JSON.stringify({
+                "email": email,
+                "password": password
+            });
+
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: loginData,
+            };
+
+            fetch('http://localhost:3000/api/user/login', options)
+                .then(res => res.json())
+                .then((data) => {
+                    console.log('raffff', data)
+                    if (data.User) {
+                        const token = data['User']['token'];
+                        localStorage.setItem('token', token);
+                        //window.location.href = 'http://localhost:3000/user/dashboard';
+                    }
+                })
+        })
+    </script>
+</body>
+
+</html>
