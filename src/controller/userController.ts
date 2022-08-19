@@ -41,7 +41,7 @@ export async function createUser(req: Request, res: Response) {
             password: passwordHash
         })
 
-        res.status(201).json({
+        res.status(200).json({
             message: 'You have successfully registered',
             record
         })
@@ -143,7 +143,7 @@ export async function updateUser(req: Request, res: Response) {
 }
 
 
-//Delet single todo
+//Delet single User
 export async function deleteUser(req: Request, res: Response) {
     // res.json({ message: 'Hello User' });
     try {
@@ -170,8 +170,8 @@ export async function deleteUser(req: Request, res: Response) {
 
 export async function loginUser(req: Request, res: Response) {
     // res.json({ message: 'Hello User' });
-    const id = uuid4();
-    const user = { ...req.body, id }
+    // const id = uuid4();
+    // const user = { ...req.body, id }
     try {
         const validationResult = loginUserSchema.validate(req.body, options)
         if (validationResult.error) {
@@ -179,14 +179,23 @@ export async function loginUser(req: Request, res: Response) {
         }
 
         const User = await UserInstance.findOne({ where: { email: req.body.email } }) as unknown as { [key: string]: string }
+
+        //checking for valid email
+        if (!User) {
+            return res.status(401).json({ message: "Email is invalid" })
+        }
+
         const { id } = User;
         const token = generateToken({ id });
 
         const validUser = await bcrypt.compare(req.body.password, User.password)
         if (!validUser) {
-            return res.status(401).json({ message: "Password do not match" })
+            return res.status(401).json({ message: "Password is invalid" })
         }
+
         if (validUser) {
+            //setting the token in the cookie
+            //res.cookie("token", token, { httpOnly: true });
             return res.status(200).json({ message: "Login successful", token, User })
         }
     } catch (err) {
@@ -195,6 +204,13 @@ export async function loginUser(req: Request, res: Response) {
             route: '/login'
         })
     }
+}
+
+export async function logoutUser(req: express.Request, res: express.Response) {
+    res.clearCookie('token')
+    res.status(200).json({
+        message: 'logged out successfully'
+    })
 }
 
 

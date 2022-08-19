@@ -12,6 +12,7 @@ async function createProduct(req, res) {
     //const product = { ...req.body, id }
     try {
         const verified = req.user;
+        console.log('@productController 14:=', req.body);
         const validationResult = utils_1.createProductSchema.validate(req.body, utils_1.options);
         if (validationResult.error) {
             return res.status(400).json({ Error: validationResult.error.details[0].message });
@@ -56,6 +57,7 @@ async function getProducts(req, res) {
     }
 }
 exports.getProducts = getProducts;
+//Getting all products
 async function getProductsApi(req, res) {
     try {
         const limit = req.query?.limit;
@@ -101,6 +103,8 @@ async function getSingleProduct(req, res) {
                 }
             ]
         });
+        if (!product)
+            return res.status(404).json({ message: "Product with given ID not found" });
         res.status(200).json({ message: 'successfully gotten single product', product });
     }
     catch (err) {
@@ -138,13 +142,13 @@ async function updateProduct(req, res) {
             rating,
             numReviews
         });
-        res.status(200).json({
+        return res.status(200).json({
             message: 'You have successfully updated product',
             record: updatedProduct
         });
     }
     catch (err) {
-        res.status(500).json({
+        return res.status(500).json({
             message: 'failed to update product',
             route: '/update/:id'
         });

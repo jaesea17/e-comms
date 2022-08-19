@@ -1,5 +1,8 @@
 import Joi from 'joi'
 import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 
 //FOR TODO
@@ -54,7 +57,7 @@ export const createUserSchema = Joi.object().keys({
     fullname: Joi.string().lowercase().required(),
     email: Joi.string().trim().lowercase().required(),
     gender: Joi.string().required(),
-    phone: Joi.string().length(14),//.pattern(/^[0-9]+$/).required(),
+    phone: Joi.string().length(11),//.pattern(/^[0-9]+$/).required(),
     address: Joi.string().required(),
     password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required(),
     confirm_password: Joi.ref("password")
@@ -77,7 +80,7 @@ export const loginUserSchema = Joi.object().keys({
 
 
 //Generate Token
-export const generateToken = (user: Record<string, unknown>): unknown => {
+export const generateToken: any = (user: Record<string, unknown>): unknown => {
     const passPhrase = process.env.JWT_SECRETE as string
     return jwt.sign(user, passPhrase, { expiresIn: '7d' })
 }

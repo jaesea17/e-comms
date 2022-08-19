@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loginUser = exports.deleteUser = exports.updateUser = exports.getSingleUser = exports.getUsers = exports.createUser = void 0;
+exports.logoutUser = exports.loginUser = exports.deleteUser = exports.updateUser = exports.getSingleUser = exports.getUsers = exports.createUser = void 0;
 const uuid_1 = require("uuid");
 const userModel_1 = require("../model/userModel");
 const utils_1 = require("../utils/utils");
@@ -42,7 +42,7 @@ async function createUser(req, res) {
             address: req.body.address,
             password: passwordHash
         });
-        res.status(201).json({
+        res.status(200).json({
             message: 'You have successfully registered',
             record
         });
@@ -139,7 +139,7 @@ async function updateUser(req, res) {
     }
 }
 exports.updateUser = updateUser;
-//Delet single todo
+//Delet single User
 async function deleteUser(req, res) {
     // res.json({ message: 'Hello User' });
     try {
@@ -166,21 +166,27 @@ async function deleteUser(req, res) {
 exports.deleteUser = deleteUser;
 async function loginUser(req, res) {
     // res.json({ message: 'Hello User' });
-    const id = (0, uuid_1.v4)();
-    const user = { ...req.body, id };
+    // const id = uuid4();
+    // const user = { ...req.body, id }
     try {
         const validationResult = utils_1.loginUserSchema.validate(req.body, utils_1.options);
         if (validationResult.error) {
             return res.status(400).json({ Error: validationResult.error.details[0].message });
         }
         const User = await userModel_1.UserInstance.findOne({ where: { email: req.body.email } });
+        //checking for valid email
+        if (!User) {
+            return res.status(401).json({ message: "Email is invalid" });
+        }
         const { id } = User;
         const token = (0, utils_1.generateToken)({ id });
         const validUser = await bcryptjs_1.default.compare(req.body.password, User.password);
         if (!validUser) {
-            return res.status(401).json({ message: "Password do not match" });
+            return res.status(401).json({ message: "Password is invalid" });
         }
         if (validUser) {
+            //setting the token in the cookie
+            //res.cookie("token", token, { httpOnly: true });
             return res.status(200).json({ message: "Login successful", token, User });
         }
     }
@@ -192,3 +198,10 @@ async function loginUser(req, res) {
     }
 }
 exports.loginUser = loginUser;
+async function logoutUser(req, res) {
+    res.clearCookie('token');
+    res.status(200).json({
+        message: 'logged out successfully'
+    });
+}
+exports.logoutUser = logoutUser;

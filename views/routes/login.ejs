@@ -44,7 +44,8 @@
                 .then((data) => {
                     console.log('raffff', data)
                     if (data.User) {
-                        const token = data['User']['token'];
+                        //const token = data['token'];
+                        const token = data['User']['id'];
                         localStorage.setItem('token', token);
                         //window.location.href = 'http://localhost:3000/user/dashboard';
                     }

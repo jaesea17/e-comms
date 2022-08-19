@@ -6,31 +6,53 @@
     </title>
     <link rel='stylesheet' href='/stylesheets/index.css' />
 
-    <script>
-        window.onload = () => {
-            const token = localStorage.getItem("token");
-            console.log(token)
-            const options = {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token
-                },
-            };
 
-            fetch(`http://localhost:3000/user/dashboard/`, options)
-                .then(res => res.json())
-                .then((data) => { })
-        }
-    </script>
 </head>
 
 <body>
     <h1>
         WELCOME
     </h1>
+    <h1> The record is<%= record %>
+    </h1>
+
+
+    <script>
+        const token = localStorage.getItem("token");
+        console.log('TOKEN VAL', token)
+        const options = {
+            headers: {
+                'Content-Type': 'application/json',
+                //'Authorization': 'Bearer ' + token
+                'Authorization': token
+            },
+        };
+
+        fetch(`http://localhost:3000/user/dashboard/`, options)
+            // .then(res => res.json())
+            // .then((data) => { })
+
+        // const token = localStorage.getItem('token')
+
+        // const response = await fetch(`http://localhost:3000/user/dashboard/`, {
+        //     method: 'GET',
+        //     headers: {
+        //         'Content-type': 'application/json',
+        //         'Authorization': `Bearer ${token}`, // notice the Bearer before your token
+        //     }
+        // })
+
+        // fetch('http://localhost:3000/user/dashboard/', {
+        //     method: 'get',
+        //     headers: new Headers({
+        //         'Authorization': `Bearer ${token}`,
+        //         'Content-Type': 'application/x-www-form-urlencoded'
+        //     }),
+        // });
 
 
 
+    </script>
 </body>
 
 </html>

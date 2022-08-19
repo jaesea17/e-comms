@@ -3,25 +3,27 @@ import express, { Request, Response, NextFunction } from 'express'
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
-import db from './config/database.config'
+import db from './config/database.config';
+import cors from 'cors';
 
 import viewsRouter from './routes/viewsRoute';
 import indexRouter from './routes/indexRoute';
 import productRouter from './routes/productRoute';
 import todosRouter from './routes/todos';
-import userRouter from './routes/userRoute'
+import userRouter from './routes/userRoute';
 
 //db.sync({force:true})--- to clear the database
 db.sync().then(() => {
   console.log('connected successfully, on port:')
 })
 
-const app = express();
+export const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'ejs');
 
+app.use(cors())
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

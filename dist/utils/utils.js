@@ -6,6 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateToken = exports.loginUserSchema = exports.updateUserSchema = exports.createUserSchema = exports.updateProductSchema = exports.createProductSchema = exports.updateTodoSchema = exports.options = exports.createTodoSchema = void 0;
 const joi_1 = __importDefault(require("joi"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 //FOR TODO
 exports.createTodoSchema = joi_1.default.object().keys({
     title: joi_1.default.string().lowercase().required(),
@@ -51,7 +53,7 @@ exports.createUserSchema = joi_1.default.object().keys({
     fullname: joi_1.default.string().lowercase().required(),
     email: joi_1.default.string().trim().lowercase().required(),
     gender: joi_1.default.string().required(),
-    phone: joi_1.default.string().length(14),
+    phone: joi_1.default.string().length(11),
     address: joi_1.default.string().required(),
     password: joi_1.default.string().regex(/^[a-zA-Z0-9]{3,30}$/).required(),
     confirm_password: joi_1.default.ref("password")

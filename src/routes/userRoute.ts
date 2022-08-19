@@ -1,5 +1,5 @@
-import express, { Request, Response, NextFunction } from 'express';
-import { createUser, deleteUser, getUsers, getSingleUser, updateUser, loginUser, } from '../controller/userController'
+import express from 'express';
+import { createUser, deleteUser, getUsers, getSingleUser, updateUser, loginUser, logoutUser } from '../controller/userController'
 import { auth } from '../middleware/auth'
 
 const router = express.Router();
@@ -18,10 +18,11 @@ router.get('/read/:id', getSingleUser)
 //Update the user
 router.patch('/update/:id', auth, updateUser)
 
-//Delet 
-router.delete('/delete/:id', auth, deleteUser)
+//Delete 
+router.delete('/delete/:id', auth, deleteUser);
 
-router.get('/getUsers', deleteUser)
+//Logout User
+router.get('/logoutUsers', logoutUser)
 
 
 

@@ -11,6 +11,7 @@ export async function createProduct(req: Request | any, res: Response) {
     //const product = { ...req.body, id }
     try {
         const verified = req.user;
+        console.log('@productController 14:=', req.body)
         const validationResult = createProductSchema.validate(req.body, options)
         if (validationResult.error) {
             return res.status(400).json({ Error: validationResult.error.details[0].message })
@@ -54,6 +55,7 @@ export async function getProducts(req: Request, res: Response) {
     }
 }
 
+//Getting all products
 export async function getProductsApi(req: Request, res: Response) {
     try {
         const limit = req.query?.limit as number | undefined
@@ -99,6 +101,7 @@ export async function getSingleProduct(req: Request, res: Response) {
                 }
             ]
         })
+        if (!product) return res.status(404).json({ message: "Product with given ID not found" })
         res.status(200).json({ message: 'successfully gotten single product', product })
 
     } catch (err) {
@@ -114,6 +117,7 @@ export async function updateProduct(req: Request, res: Response) {
     // res.json({ message: 'Hello User' });
     try {
         const { id } = req.params;
+
         const {
             name,
             image,
@@ -125,10 +129,13 @@ export async function updateProduct(req: Request, res: Response) {
             rating,
             numReviews
         } = req.body;
+
         const validateUpdate = updateProductSchema.validate(req.body, options)
+
         if (validateUpdate.error) {
             return res.status(400).json({ Error: validateUpdate.error.details[0].message })
         }
+
         const record = await ProductInstance.findOne({ where: { id } })
         if (!record) {
             return res.status(400).json({
@@ -146,13 +153,13 @@ export async function updateProduct(req: Request, res: Response) {
             rating,
             numReviews
         })
-        res.status(200).json({
+        return res.status(200).json({
             message: 'You have successfully updated product',
             record: updatedProduct
         })
 
     } catch (err) {
-        res.status(500).json({
+        return res.status(500).json({
             message: 'failed to update product',
             route: '/update/:id'
         })

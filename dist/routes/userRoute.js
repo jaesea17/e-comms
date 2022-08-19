@@ -17,7 +17,8 @@ router.get('/read', userController_1.getUsers);
 router.get('/read/:id', userController_1.getSingleUser);
 //Update the user
 router.patch('/update/:id', auth_1.auth, userController_1.updateUser);
-//Delet 
+//Delete 
 router.delete('/delete/:id', auth_1.auth, userController_1.deleteUser);
-router.get('/getUsers', userController_1.deleteUser);
+//Logout User
+router.get('/logoutUsers', userController_1.logoutUser);
 exports.default = router;

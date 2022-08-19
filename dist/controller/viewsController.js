@@ -14,7 +14,7 @@ exports.loginView = loginView;
 async function dashboardView(req, res, next) {
     try {
         //const id = req.params.id;
-        const { id } = req.user;
+        const id = req['rawHeaders'][7];
         console.log('@viewsController 17:=', id);
         const record = await userModel_1.UserInstance.findOne({
             where: { id },
@@ -23,15 +23,18 @@ async function dashboardView(req, res, next) {
                     as: 'products'
                 }]
         });
+        console.log('@viewsController_25:=', record);
         res.render('./routes/dashboard', { record });
     }
     catch (err) {
+        console.log('@viewsController 28:=', req.user);
         res.status(500).json({
             message: 'failed to read single user',
             route: '/read/:id'
         });
     }
-    //res.render('./routes/dashboard');
+    // console.log('@viewsController 34 req.params:=', req['rawHeaders'][7]);
+    // res.render('./routes/dashboard');
 }
 exports.dashboardView = dashboardView;
 function createView(req, res, next) {
