@@ -167,7 +167,7 @@ export async function updateProduct(req: Request, res: Response) {
 }
 
 
-//Delet single todo
+//Delete single Product
 export async function deleteProduct(req: Request, res: Response) {
     // res.json({ message: 'Hello User' });
     try {
